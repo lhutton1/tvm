@@ -307,10 +307,7 @@ def _slice():
         begin = [0] * ndim
         dim = int(inputs[1])
         stride = int(inputs[4])
-        if isinstance(inputs[2], _expr.Call):
-            begin[dim], _ = try_infer_value(inputs[2], lambda ret: np.asscalar(ret.astype(np.int)))
-        else:
-            begin[dim] = int(inputs[2])
+        begin[dim], _ = try_infer_value(inputs[2], lambda ret: np.asscalar(ret.astype(np.int)))
 
         # Process begin
         if not isinstance(begin[dim], int):
