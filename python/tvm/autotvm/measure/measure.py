@@ -262,9 +262,12 @@ def create_measure_batch(task, option):
     builder.set_task(task, build_kwargs)
 
     def measure_batch(measure_inputs):
+        import time
         build_results = builder.build(measure_inputs)
+        start_time = time.time()
         results = runner.run(measure_inputs, build_results)
-        return results
+        end_time = time.time() - start_time
+        return results, end_time
 
     measure_batch.n_parallel = builder.n_parallel
     measure_batch.attach_objects = attach_objects

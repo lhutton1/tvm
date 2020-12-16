@@ -123,6 +123,7 @@ class Tuner(object):
         GLOBAL_SCOPE.in_tuning = True
         i = error_ct = 0
         errors = []
+        task_time = 0
         while i < n_trial:
             if not self.has_next():
                 break
@@ -130,7 +131,8 @@ class Tuner(object):
             configs = self.next_batch(min(n_parallel, n_trial - i))
 
             inputs = [MeasureInput(self.task.target, self.task, config) for config in configs]
-            results = measure_batch(inputs)
+            results, time = measure_batch(inputs)
+            task_time += time
 
             # keep best config
             for k, (inp, res) in enumerate(zip(inputs, results)):
@@ -180,7 +182,7 @@ class Tuner(object):
                 logger.setLevel(logging.DEBUG)
             else:
                 logger.setLevel(old_level)
-
+        print("TASK REMOTE TIME:", task_time)
         if error_ct == i:
             _, f = tempfile.mkstemp(prefix="tvm_tuning_errors_", suffix=".log", text=True)
             with open(f, "w") as file:
