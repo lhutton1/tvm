@@ -182,7 +182,7 @@ class Tuner(object):
                 logger.setLevel(logging.DEBUG)
             else:
                 logger.setLevel(old_level)
-        print("TASK REMOTE TIME:", task_time)
+        print(" TASK REMOTE TIME:", round(task_time, 2))
         if error_ct == i:
             _, f = tempfile.mkstemp(prefix="tvm_tuning_errors_", suffix=".log", text=True)
             with open(f, "w") as file:
